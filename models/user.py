@@ -16,7 +16,7 @@ class UserSchema(ma.Schema):
     # comments = fields.List(fields.Nested('CommentSchema', exclude=['user']))
 
     class Meta:
-        fields = ('id', 'name', 'email', 'password', 'is_admin', 'cards', 'comments')
+        fields = ('id', 'name', 'date_of_birth', 'email', 'password', 'is_admin')
     
 user_schema = UserSchema(exclude=['password'])
 users_schema = UserSchema(many=True, exclude=['password'])
