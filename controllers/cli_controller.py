@@ -1,6 +1,7 @@
 from flask import Blueprint
 from init import db, bcrypt
 from models.user import User
+from models.surf_break import SurfBreak
 # from models.card import Card
 # from models.comment import Comment
 from datetime import date
@@ -36,6 +37,32 @@ def seed_db():
     ]
     
     db.session.add_all(users)
+    
+    surf_break = [
+        SurfBreak(
+            name='Pines',
+            location='Shoreham',
+            description='Surf break on the mornington peninsula'
+        ),
+        SurfBreak(
+            name='Little Noosa',
+            location='Shoreham',
+            description='Surf break on the mornington peninsula'
+        ),
+        SurfBreak(
+            name='Honeysuckle',
+            location='Point Leo',
+            description='Surf break on the mornington peninsula'
+        ),
+        SurfBreak(
+            name='Second Reef',
+            location='Point Leo',
+            description='Surf break on the mornington peninsula'
+        )
+    ]
+    
+    db.session.add_all(surf_break)
+    
     db.session.commit()
     
     print("Tables seeded")
