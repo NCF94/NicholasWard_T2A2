@@ -4,17 +4,21 @@ from marshmallow.validate import Length, And, Regexp, OneOf
 
 
 class SurfBreak(db.Model):
-    __tablename__ = "surf_break"
+    __tablename__ = "surf_breaks"
     
     break_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
     location = db.Column(db.String, nullable=False)
     description = db.Column(db.Text)
     
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    
+    user = db.relationship('User', back_populates='surf_breaks')
     # break_type = db.relationship('BreakType', back_populates='surf_breaks')
     # comments = db.relationship('Comment', back_populates='surf_break', cascade='all, delete')
     
 class SurfBreakSchema(ma.Schema):
+    user = fields.Nested('UserSchema', only=['name', 'email'])
     # comments = fields.List(fields.Nested('CommentSchema'), exclude=['surf_break'])
     
     name = fields.String(required=True, validate=And(
@@ -23,7 +27,7 @@ class SurfBreakSchema(ma.Schema):
     ))
     
     class Meta:
-        fields = ('break_id', 'name', 'location', 'description')
+        fields = ('break_id', 'name', 'location', 'description', 'user')
         ordered = True
         
 surf_break_schema = SurfBreakSchema()
