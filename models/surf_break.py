@@ -9,7 +9,7 @@ class SurfBreak(db.Model):
     break_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
     location = db.Column(db.String, nullable=False)
-    description = db.column(db.Text)
+    description = db.Column(db.Text)
     
     # break_type = db.relationship('BreakType', back_populates='surf_breaks')
     # comments = db.relationship('Comment', back_populates='surf_break', cascade='all, delete')
