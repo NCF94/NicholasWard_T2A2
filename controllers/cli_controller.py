@@ -42,22 +42,26 @@ def seed_db():
         SurfBreak(
             name='Pines',
             location='Shoreham',
-            description='Surf break on the mornington peninsula'
+            description='Surf break on the mornington peninsula',
+            user=users[0]
         ),
         SurfBreak(
             name='Little Noosa',
             location='Shoreham',
-            description='Surf break on the mornington peninsula'
+            description='Surf break on the mornington peninsula',
+            user=users[0]
         ),
         SurfBreak(
             name='Honeysuckle',
             location='Point Leo',
-            description='Surf break on the mornington peninsula'
+            description='Surf break on the mornington peninsula',
+            user=users[1]
         ),
         SurfBreak(
             name='Second Reef',
             location='Point Leo',
-            description='Surf break on the mornington peninsula'
+            description='Surf break on the mornington peninsula',
+            user=users[1]
         )
     ]
     
