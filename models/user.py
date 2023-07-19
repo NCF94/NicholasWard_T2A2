@@ -5,8 +5,8 @@ class User(db.Model):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50))
-    date_of_birth = db.Column(db.String)
+    name = db.Column(db.String(50), nullable=False)
+    date_of_birth = db.Column(db.String, nullable=False)
     email = db.Column(db.String, nullable=False, unique=True)
     password = db.Column(db.String, nullable=False)
     is_admin = db.Column(db.Boolean, default=False)
