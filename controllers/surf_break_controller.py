@@ -21,7 +21,7 @@ def get_one_surf_break(id):
     else:
         return {'error': f'Surf break not found with id {id}'}, 404
 
-@surf_break_bp.route('/', methods=['POST'])
+@surf_break_bp.route('/', methods=['POST']) #Post method
 @jwt_required()
 def create_surf_break():
     body_data = surf_break_schema.load(request.get_json())
@@ -37,11 +37,33 @@ def create_surf_break():
     
     return surf_break_schema.dump(surf_break), 201
 
-# @surf_break_bp.route('/<int:id>', methods=['DELETE'])
-# @jwt_required()
-# def delete_one_surf_break():
+@surf_break_bp.route('/<int:id>', methods=['DELETE']) #Delete method
+@jwt_required()
+def delete_one_surf_break(id):
+    stmt = db.select(SurfBreak).filter_by(break_id=id)
+    surf_break = db.session.scalar(stmt)
+    if surf_break:
+        db.session.delete(surf_break)
+        db.session.commit()
+        return {'message': f'Surf Break {surf_break.name} deleted successfully'}
+    else:
+        return {'error': f'Surf Break not found with id {id}'}, 404
     
     
-# @surf_break_bp.route('/<int:id>', methods=['PUT', 'PATCH'])
-# @jwt_required()
-# def update_one_surf_break():
+@surf_break_bp.route('/<int:id>', methods=['PUT', 'PATCH'])
+@jwt_required()
+def update_one_surf_break(id):
+    body_data = surf_break_schema.load(request.get_json(), partial=True)
+    stmt = db.select(SurfBreak).filter_by(break_id=id)
+    surf_break = db.session.scalar(stmt)
+    if surf_break:
+        surf_break.name = body_data.get('name') or surf_break.name   
+        surf_break.location = body_data.get('location') or surf_break.location   
+        surf_break.description = body_data.get('description') or surf_break.description
+        db.session.commit()
+        return surf_break_schema.dump(surf_break)   
+    else:
+        return {'error': f'Surf Break not found with id {id}'}, 404
+
+
+    
