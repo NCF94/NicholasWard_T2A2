@@ -6,13 +6,13 @@ class Comment(db.Model):
 
     comment_id = db.Column(db.Integer, primary_key=True)
     user_comment = db.Column(db.Text)
-    rating = db.Column(db.Interger)
+    rating = db.Column(db.String)
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    break_id = db.Column(db.Integer, db.ForeignKey('cards.id'), nullable=False)
+    break_id = db.Column(db.Integer, db.ForeignKey('surf_breaks.break_id'), nullable=False)
 
     user = db.relationship('User', back_populates='comments') # {id: 1, name: "User 1"}
-    surf_breaks = db.relationship('SurfBreak', back_populates='comments', cascade='all, delete')
+    surf_break = db.relationship('SurfBreak', back_populates='comments', cascade='all, delete')
 
 
 class CommentSchema(ma.Schema):

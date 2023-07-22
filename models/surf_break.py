@@ -13,7 +13,7 @@ class SurfBreak(db.Model):
     
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     
-    user = db.relationship('User', back_populates='surf_breaks')
+    user = db.relationship('User', back_populates='surf_break')
     comments = db.relationship('Comment', back_populates='surf_break', cascade='all, delete')
     # break_type = db.relationship('BreakType', back_populates='surf_breaks')
     
@@ -28,7 +28,7 @@ class SurfBreakSchema(ma.Schema):
     ))
     
     class Meta:
-        fields = ('break_id', 'name', 'location', 'description', 'user')
+        fields = ('break_id', 'name', 'location', 'description', 'user', 'comments')
         ordered = True
         
 surf_break_schema = SurfBreakSchema()
