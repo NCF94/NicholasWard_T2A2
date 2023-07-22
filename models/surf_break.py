@@ -13,13 +13,14 @@ class SurfBreak(db.Model):
     
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     
-    user = db.relationship('User', back_populates='surf_breaks')
+    user = db.relationship('User', back_populates='surf_break')
+    comments = db.relationship('Comment', back_populates='surf_break', cascade='all, delete')
     # break_type = db.relationship('BreakType', back_populates='surf_breaks')
-    # comments = db.relationship('Comment', back_populates='surf_break', cascade='all, delete')
     
 class SurfBreakSchema(ma.Schema):
     user = fields.Nested('UserSchema', only=['name', 'email'])
-    # comments = fields.List(fields.Nested('CommentSchema'), exclude=['surf_break'])
+    comments = fields.List(fields.Nested('CommentSchema'), exclude=['surf_break'])
+    # break_type = fields.List(fields.Nested('BreakTypeSchema') exclude=['surf_break])
     
     name = fields.String(required=True, validate=And(
         Length(min=2, error='Surf Break name must be at least 2 characters long'),
@@ -27,7 +28,7 @@ class SurfBreakSchema(ma.Schema):
     ))
     
     class Meta:
-        fields = ('break_id', 'name', 'location', 'description', 'user')
+        fields = ('break_id', 'name', 'location', 'description', 'user', 'comments')
         ordered = True
         
 surf_break_schema = SurfBreakSchema()

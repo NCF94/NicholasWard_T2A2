@@ -11,14 +11,16 @@ class User(db.Model):
     password = db.Column(db.String, nullable=False)
     is_admin = db.Column(db.Boolean, default=False)
     
-    surf_breaks = db.relationship('SurfBreak', back_populates='user', cascade='all, delete')
+    surf_break = db.relationship('SurfBreak', back_populates='user', cascade='all, delete')
+    comments = db.relationship('Comment', back_populates='user', cascade='all, delete')
+    
 
 class UserSchema(ma.Schema):
     surf_breaks = fields.List(fields.Nested('SurfBreakSchema', exclude=['user']))
-    # comments = fields.List(fields.Nested('CommentSchema', exclude=['user']))
+    comments = fields.List(fields.Nested('CommentSchema', exclude=['user']))
 
     class Meta:
-        fields = ('id', 'name', 'date_of_birth', 'email', 'password', 'is_admin', 'surf_break')
+        fields = ('id', 'name', 'date_of_birth', 'email', 'password', 'is_admin', 'surf_break', 'comments')
         ordered = True
     
 user_schema = UserSchema(exclude=['password'])
