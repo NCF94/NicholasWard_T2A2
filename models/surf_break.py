@@ -6,7 +6,7 @@ from marshmallow.validate import Length, And, Regexp, OneOf
 class SurfBreak(db.Model):
     __tablename__ = "surf_breaks"
     
-    break_id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
     location = db.Column(db.String, nullable=False)
     description = db.Column(db.Text)
@@ -15,12 +15,12 @@ class SurfBreak(db.Model):
     
     user = db.relationship('User', back_populates='surf_break')
     comments = db.relationship('Comment', back_populates='surf_break', cascade='all, delete')
-    # break_type = db.relationship('BreakType', back_populates='surf_breaks')
+    break_type = db.relationship('BreakType', back_populates='surf_breaks')
     
 class SurfBreakSchema(ma.Schema):
     user = fields.Nested('UserSchema', only=['name', 'email'])
     comments = fields.List(fields.Nested('CommentSchema'), exclude=['surf_break'])
-    # break_type = fields.List(fields.Nested('BreakTypeSchema') exclude=['surf_break])
+    break_type = fields.List(fields.Nested('BreakTypeSchema'), exclude=['surf_break'])
     
     name = fields.String(required=True, validate=And(
         Length(min=2, error='Surf Break name must be at least 2 characters long'),
@@ -28,7 +28,7 @@ class SurfBreakSchema(ma.Schema):
     ))
     
     class Meta:
-        fields = ('break_id', 'name', 'location', 'description', 'user', 'comments')
+        fields = ('id', 'name', 'location', 'description', 'user', 'comments')
         ordered = True
         
 surf_break_schema = SurfBreakSchema()
