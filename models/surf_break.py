@@ -12,10 +12,11 @@ class SurfBreak(db.Model):
     description = db.Column(db.Text)
     
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    # type_id = db.Column(db.Integer, db.ForeignKey('break_type.id'), nullable=False)
     
     user = db.relationship('User', back_populates='surf_break')
     comments = db.relationship('Comment', back_populates='surf_break', cascade='all, delete')
-    break_type = db.relationship('BreakType', back_populates='surf_breaks')
+    break_type = db.relationship('BreakType', back_populates='surf_break', uselist=False)
     
 class SurfBreakSchema(ma.Schema):
     user = fields.Nested('UserSchema', only=['name', 'email'])

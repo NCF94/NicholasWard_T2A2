@@ -4,9 +4,12 @@ from datetime import date
 from models.surf_break import SurfBreak, surf_break_schema, surf_breaks_schema
 from flask_jwt_extended import get_jwt_identity, jwt_required
 from controllers.comment_controller import comments_bp
+from controllers.break_type_controller import break_type_bp
 
 surf_break_bp = Blueprint('surf_breaks', __name__, url_prefix='/surf_breaks')
 surf_break_bp.register_blueprint(comments_bp, url_prefix='/<int:break_id>/comments')
+surf_break_bp.register_blueprint(break_type_bp, url_prefix='/<int:break_id>/break_type')
+
 
 
 @surf_break_bp.route('/')

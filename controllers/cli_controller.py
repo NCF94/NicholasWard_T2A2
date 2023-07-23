@@ -3,6 +3,7 @@ from init import db, bcrypt
 from models.user import User
 from models.surf_break import SurfBreak
 from models.comment import Comment
+from models.break_type import BreakType
 from datetime import date
 
 db_commands = Blueprint('db', __name__)
@@ -37,30 +38,50 @@ def seed_db():
     
     db.session.add_all(users)
     
+    break_type = [
+        BreakType(
+            break_type="Beach",
+        ),
+        
+        BreakType(
+            break_type="Reef",
+        ),
+        
+        BreakType(
+            break_type="Point",
+        )
+    ]
+    
+    db.session.add_all(break_type)
+    
     surf_break = [
         SurfBreak(
             name='Pines',
             location='Shoreham',
             description='Surf break on the mornington peninsula',
             user=users[0],
+            break_type=break_type[2]
         ),
         SurfBreak(
             name='Little Noosa',
             location='Shoreham',
             description='Surf break on the mornington peninsula',
             user=users[0],
+            break_type=break_type[0]
         ),
         SurfBreak(
             name='Honeysuckle',
             location='Point Leo',
             description='Surf break on the mornington peninsula',
             user=users[1],
+            break_type=break_type[1]
         ),
         SurfBreak(
             name='Second Reef',
             location='Point Leo',
             description='Surf break on the mornington peninsula',
             user=users[1],
+            break_type=break_type[1]
         )
     ]
     
@@ -96,7 +117,10 @@ def seed_db():
             surf_break=surf_break[3] 
         )
     ]
+    
     db.session.add_all(comments)
+    
+    
     
     db.session.commit()
     
