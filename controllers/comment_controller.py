@@ -1,5 +1,6 @@
 from flask import Blueprint, request
 from init import db
+from datetime import date
 from models.surf_break import SurfBreak
 from models.comment import Comment, comment_schema
 from flask_jwt_extended import jwt_required, get_jwt_identity
@@ -15,8 +16,10 @@ def create_comment(break_id):
     if surf_break:
         comment = Comment(
             user_comment=body_data.get('user_comment'),
-            user_id=get_jwt_identity(), # pass id to the _id field
-            surf_break=surf_break # pass the model instance to the model field
+            rating=body_data.get('rating'),
+            date=date.today(),
+            surf_break=surf_break, # pass the model instance to the model field
+            user_id=get_jwt_identity() # pass id to the _id field
         )
 
         db.session.add(comment)
@@ -28,12 +31,12 @@ def create_comment(break_id):
 @comments_bp.route('/<int:comment_id>', methods=['DELETE'])
 @jwt_required()
 def delete_comment(break_id, comment_id):
-    stmt = db.select(Comment).filter_by(id=comment_id)
+    stmt = db.select(Comment).filter_by(comment_id=comment_id)
     comment = db.session.scalar(stmt)
     if comment:
         db.session.delete(comment)
         db.session.commit()
-        return {'message': f'Comment {comment.message} deleted successfully'}
+        return {'user_comment': f"Comment '{comment.user_comment}' deleted successfully"}
     else:
         return {'error': f'Comment not found with id {comment_id}'}, 404
     
@@ -41,10 +44,10 @@ def delete_comment(break_id, comment_id):
 @jwt_required()
 def update_comment(break_id, comment_id):
     body_data = request.get_json()
-    stmt = db.select(Comment).filter_by(id=comment_id)
+    stmt = db.select(Comment).filter_by(comment_id=comment_id)
     comment = db.session.scalar(stmt) # comment from database that needs to be updated
     if comment:
-        comment.message = body_data.get('user_comment') or comment.message
+        comment.user_comment = body_data.get('user_comment') or comment.user_comment
         db.session.commit()
         return comment_schema.dump(comment)
     else:

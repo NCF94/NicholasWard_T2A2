@@ -1,6 +1,6 @@
 from init import db, ma
-from marshmallow import fields, validates
-from marshmallow.validate import Length, And, Regexp, OneOf
+from marshmallow import fields
+from marshmallow.validate import Length, And, Regexp
 
 
 class SurfBreak(db.Model):
@@ -12,11 +12,11 @@ class SurfBreak(db.Model):
     description = db.Column(db.Text)
     
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    # type_id = db.Column(db.Integer, db.ForeignKey('break_type.id'), nullable=False)
+    break_type_id = db.Column(db.Integer, db.ForeignKey('break_type.type_id'),nullable=False)
     
     user = db.relationship('User', back_populates='surf_break')
-    comments = db.relationship('Comment', back_populates='surf_break', cascade='all, delete')
-    break_type = db.relationship('BreakType', back_populates='surf_break', uselist=False)
+    comments = db.relationship('Comment', back_populates='surf_break', cascade = 'all, delete')
+    break_type = db.relationship('BreakType', back_populates='surf_break',cascade = 'all, delete', uselist=False)
     
 class SurfBreakSchema(ma.Schema):
     user = fields.Nested('UserSchema', only=['name', 'email'])
@@ -29,7 +29,7 @@ class SurfBreakSchema(ma.Schema):
     ))
     
     class Meta:
-        fields = ('id', 'name', 'location', 'description', 'user', 'comments')
+        fields = ('id', 'name', 'location', 'description', 'user', 'comments', 'break_type')
         ordered = True
         
 surf_break_schema = SurfBreakSchema()
