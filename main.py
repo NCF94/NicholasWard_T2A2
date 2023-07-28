@@ -21,11 +21,11 @@ def create_app():
     def validation_error(err):
         return {'error': err.messages}, 400
     
-    @app.errorhandler(400)
+    @app.errorhandler(400) #handle 400 error
     def bad_request(err):
         return {'error': str(err)}, 400
     
-    @app.errorhandler(404)
+    @app.errorhandler(404) #handle 404 error
     def bad_request(err):
         return {'error': str(err)}, 404
     

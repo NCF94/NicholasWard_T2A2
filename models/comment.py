@@ -1,6 +1,7 @@
 from init import db, ma
 from marshmallow import fields
 
+#define Comment model for database
 class Comment(db.Model):
     __tablename__ = 'comments' #comments table
 
@@ -16,14 +17,15 @@ class Comment(db.Model):
     #relationships
     user = db.relationship('User', back_populates='comments') 
     surf_break = db.relationship('SurfBreak', back_populates='comments')
-
+    
+# Define marshmallow schema    
 class CommentSchema(ma.Schema):
     user = fields.Nested('UserSchema', only=['name', 'email'])
     surf_break = fields.Nested('SurfBreakSchema', exclude=['comments'])
 
     class Meta:
         fields = ('comment_id', 'user', 'break', 'rating', 'date', 'user_comment')
-        ordered = True
+        ordered = True#order output as order in 'fields'
 
 comment_schema = CommentSchema()
 comments_schema = CommentSchema(many=True)

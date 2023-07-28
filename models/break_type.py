@@ -6,6 +6,7 @@ from marshmallow.validate import OneOf
 
 VALID_BREAK_TYPE = ('reef', 'point', 'beach') #accepted break types
 
+#define BreakType model for database
 class BreakType(db.Model):
     __tablename__ = 'break_type' #breaktype table
     
@@ -16,15 +17,16 @@ class BreakType(db.Model):
     # relationships
     surf_break = db.relationship('SurfBreak', back_populates='break_type', uselist=False) 
     
+# Define marshmallow schema    
 class BreakTypeSchema(ma.Schema):
-    surf_break = fields.Nested('SurfBreakSchema', exclude=['comments'])
+    surf_break = fields.Nested('SurfBreakSchema', exclude=['comments']) 
 
         # validates the break type entered is one of reef, point or beach
     break_type = fields.String(required=True, validate = OneOf(VALID_BREAK_TYPE, error='break type must be one of reef, point or beach'))
     
     class Meta:
         fields = ('type_id','break_type')
-        ordered = True
+        ordered = True #order output as order in 'fields
     
 break_type_schema = BreakTypeSchema()
 break_types_schema = BreakTypeSchema(many=True)

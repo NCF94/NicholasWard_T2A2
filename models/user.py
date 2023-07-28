@@ -1,6 +1,7 @@
 from init import db, ma
 from marshmallow import fields
 
+#Define User model for database
 class User(db.Model):
     __tablename__ = 'users' #users table
 
@@ -16,14 +17,14 @@ class User(db.Model):
     surf_break = db.relationship('SurfBreak', back_populates='user', cascade='all, delete') 
     comments = db.relationship('Comment', back_populates='user', cascade='all, delete') 
     
-
+# Define marshmallow schema    
 class UserSchema(ma.Schema):
     surf_breaks = fields.List(fields.Nested('SurfBreakSchema', exclude=['user']))
     comments = fields.List(fields.Nested('CommentSchema', exclude=['user']))
 
     class Meta:
         fields = ('id', 'name', 'date_of_birth', 'email', 'password', 'is_admin', 'surf_break', 'comments')
-        ordered = True
+        ordered = True#order output as order in 'fields'
     
 user_schema = UserSchema(exclude=['password'])
 users_schema = UserSchema(many=True, exclude=['password'])

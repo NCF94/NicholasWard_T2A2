@@ -8,27 +8,27 @@ from datetime import date
 
 db_commands = Blueprint('db', __name__)
 
-@db_commands.cli.command('create')
+@db_commands.cli.command('create') #create tables specified in models folder
 def create_db():
     db.create_all()
-    print("Tables Created")
+    print("Tables Created") #confirmation message function worked
 
-@db_commands.cli.command('drop')
+@db_commands.cli.command('drop') #delete or 'drop' database and its associated tables
 def drop_db():
     db.drop_all()
-    print("Tables dropped")
+    print("Tables dropped") #confirmation message function worked
     
-@db_commands.cli.command('seed')
+@db_commands.cli.command('seed') #seeds the created database with data for all models in the database
 def seed_db():
     users = [
-        User(
+        User( #ADMIN
             name='Nick',
             email='admin@surfing.com',
             date_of_birth='08/02/1994',
             password=bcrypt.generate_password_hash('admin').decode('utf-8'),
             is_admin=True
         ),
-        User(
+        User( #NON ADMIN USER
             name='User1',
             date_of_birth='18/07/1990',
             email='user1@surfing.com',
@@ -38,7 +38,7 @@ def seed_db():
     
     db.session.add_all(users)
     
-    break_type = [
+    break_type = [ #Create break types
         BreakType(
             type_id = 0,
             break_type="beach",
@@ -56,7 +56,7 @@ def seed_db():
     ]
     db.session.add_all(break_type)
     
-    surf_break = [
+    surf_break = [ #CREATE surf_breaks
         SurfBreak(
             name='Pines',
             location='Shoreham',
@@ -82,7 +82,7 @@ def seed_db():
     
     db.session.add_all(surf_break)
     
-    comments = [
+    comments = [ #create comments
         Comment(
             user_comment="Comment 1",
             rating="1/5",
@@ -111,6 +111,6 @@ def seed_db():
     
     
     
-    db.session.commit()
+    db.session.commit() # commit or seed all to database
     
-    print("Tables seeded")
+    print("Tables seeded") #confirmatrion message function worked
