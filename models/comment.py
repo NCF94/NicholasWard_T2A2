@@ -2,19 +2,20 @@ from init import db, ma
 from marshmallow import fields
 
 class Comment(db.Model):
-    __tablename__ = 'comments'
+    __tablename__ = 'comments' #comments table
 
-    comment_id = db.Column(db.Integer, primary_key=True)
+    #columns in table
+    comment_id = db.Column(db.Integer, primary_key=True) #primary key
     user_comment = db.Column(db.Text)
     rating = db.Column(db.String)
     date = db.Column(db.Date, nullable=False)
 
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    break_id = db.Column(db.Integer, db.ForeignKey('surf_breaks.id'), nullable=False)
-
-    user = db.relationship('User', back_populates='comments') # {id: 1, name: "User 1"}
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False) #foreign key, maps to id column of users table
+    break_id = db.Column(db.Integer, db.ForeignKey('surf_breaks.id'), nullable=False) #foreign key, maps to id column of surf_breaks table
+    
+    #relationships
+    user = db.relationship('User', back_populates='comments') 
     surf_break = db.relationship('SurfBreak', back_populates='comments')
-
 
 class CommentSchema(ma.Schema):
     user = fields.Nested('UserSchema', only=['name', 'email'])

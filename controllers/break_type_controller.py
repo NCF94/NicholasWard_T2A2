@@ -10,7 +10,7 @@ break_type_bp = Blueprint('break_type', __name__)
 @break_type_bp.route('/', methods=['POST'])
 @jwt_required()
 def create_break_type(break_id):
-    body_data = request.get_json()
+    body_data = break_type_schema.load(request.get_json())
     stmt = db.select(SurfBreak).filter_by(id=break_id) 
     surf_break = db.session.scalar(stmt)
     if surf_break:

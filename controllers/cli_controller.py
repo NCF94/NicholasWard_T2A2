@@ -38,6 +38,23 @@ def seed_db():
     
     db.session.add_all(users)
     
+    break_type = [
+        BreakType(
+            type_id = 0,
+            break_type="beach",
+        ),
+        
+        BreakType(
+            type_id = 1,
+            break_type="reef",
+        ),
+        
+        BreakType(
+            type_id = 2,
+            break_type="point",
+        ),
+    ]
+    db.session.add_all(break_type)
     
     surf_break = [
         SurfBreak(
@@ -45,21 +62,21 @@ def seed_db():
             location='Shoreham',
             description='Surf break on the mornington peninsula',
             user=users[0],
-
+            break_type=break_type[0]  
         ),
         SurfBreak(
             name='Little Noosa',
             location='Shoreham',
             description='Surf break on the mornington peninsula',
             user=users[0],
-
+            break_type=break_type[1]  
         ),
         SurfBreak(
             name='Honeysuckle',
             location='Point Leo',
             description='Surf break on the mornington peninsula',
             user=users[1],
-
+            break_type=break_type[2]  
         ),
     ]
     
@@ -91,24 +108,7 @@ def seed_db():
     
     db.session.add_all(comments)
     
-    break_type = [
-        BreakType(
-            break_type="beach",
-            surf_break=surf_break[0] 
-        ),
-        
-        BreakType(
-            break_type="reef",
-            surf_break=surf_break[1] 
-        ),
-        
-        BreakType(
-            break_type="point",
-            surf_break=surf_break[2] 
-        ),
-    ]
     
-    db.session.add_all(break_type)
     
     
     db.session.commit()

@@ -5,11 +5,25 @@ from models.surf_break import SurfBreak, surf_break_schema, surf_breaks_schema
 from flask_jwt_extended import get_jwt_identity, jwt_required
 from controllers.comment_controller import comments_bp
 from controllers.break_type_controller import break_type_bp
+from models.user import User
+import functools
 
 surf_break_bp = Blueprint('surf_breaks', __name__, url_prefix='/surf_breaks')
 surf_break_bp.register_blueprint(comments_bp, url_prefix='/<int:break_id>/comments')
 surf_break_bp.register_blueprint(break_type_bp, url_prefix='/<int:break_id>/break_type')
 
+def authorise_as_admin(fn): #decorator for deleting surf breaks
+    @functools.wraps(fn)
+    def wrapper(*args, **kwargs):  #function to check if user is admin before surf break can be deleted.
+        user_id = get_jwt_identity()
+        stmt = db.select(User).filter_by(id=user_id)
+        user = db.session.scalar(stmt)
+        if user.is_admin:
+            return fn(*args, **kwargs)
+        else:
+            return {'error': 'Not authorised to perform delete'}
+    
+    return wrapper
 
 
 @surf_break_bp.route('/')
@@ -48,6 +62,7 @@ def create_surf_break():
 
 @surf_break_bp.route('/<int:id>', methods=['DELETE'])  # Delete method
 @jwt_required()
+@authorise_as_admin# decorator - if user is not admin, surf break will not be deleted and return error message
 def delete_one_surf_break(id):
     stmt = db.select(SurfBreak).filter_by(id=id)
     surf_break = db.session.scalar(stmt)
@@ -74,3 +89,6 @@ def update_one_surf_break(id):
         return surf_break_schema.dump(surf_break)
     else:
         return {'error': f'Surf Break not found with id {id}'}, 404
+    
+    
+
