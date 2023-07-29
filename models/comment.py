@@ -1,5 +1,7 @@
 from init import db, ma
 from marshmallow import fields
+from marshmallow.validate import Length, And, Regexp
+
 
 #define Comment model for database
 class Comment(db.Model):
@@ -7,7 +9,7 @@ class Comment(db.Model):
 
     #columns in table
     comment_id = db.Column(db.Integer, primary_key=True) #primary key
-    user_comment = db.Column(db.Text)
+    user_comment = db.Column(db.Text, nullable=False)
     rating = db.Column(db.String)
     date = db.Column(db.Date, nullable=False)
 
@@ -24,7 +26,7 @@ class CommentSchema(ma.Schema):
     surf_break = fields.Nested('SurfBreakSchema', exclude=['comments'])
 
     class Meta:
-        fields = ('comment_id', 'user', 'break', 'rating', 'date', 'user_comment')
+        fields = ('comment_id', 'user', 'break', 'rating', 'date', 'user', 'user_comment')
         ordered = True#order output as order in 'fields'
 
 comment_schema = CommentSchema()

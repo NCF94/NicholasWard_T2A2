@@ -51,7 +51,7 @@ def delete_break_type(break_id, type_id):
 @jwt_required()
 def update_break_type(break_id, type_id):
     body_data = request.get_json()
-    stmt = db.select(BreakType).filter_by(id=type_id)
+    stmt = db.select(BreakType).filter_by(type_id=type_id)
     break_type = db.session.scalar(stmt) # break from database that needs to be updated
     if break_type:
         #updated break type

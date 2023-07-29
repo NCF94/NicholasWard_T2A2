@@ -17,8 +17,8 @@ class SurfBreak(db.Model):
     
     #relationships
     user = db.relationship('User', back_populates='surf_break') 
-    comments = db.relationship('Comment', back_populates='surf_break', cascade = 'all, delete') 
-    break_type = db.relationship('BreakType', back_populates='surf_break',cascade = 'all, delete', uselist=False) 
+    comments = db.relationship('Comment', back_populates='surf_break') 
+    break_type = db.relationship('BreakType', back_populates='surf_break', uselist=False) 
     
 # Define marshmallow schema    
 class SurfBreakSchema(ma.Schema):
@@ -31,7 +31,10 @@ class SurfBreakSchema(ma.Schema):
         Length(min=2, error='Surf Break name must be at least 2 characters long'),
         Regexp('^[a-zA-Z0-9 ]+$', error='Only letters, spaces and numbers are allowed')
     ))
-    
+    location = fields.String(required=True, validate=And(
+        Length(min=2, error='Surf Break location must be at least 2 characters long'),
+        Regexp('^[a-zA-Z0-9 ]+$', error='Only letters, spaces and numbers are allowed')
+    ))
     class Meta:
         fields = ('id', 'name', 'location', 'description', 'user', 'comments', 'break_type')
         ordered = True#order output as order in 'fields'

@@ -3,6 +3,7 @@ from init import db
 from datetime import date
 from models.surf_break import SurfBreak
 from models.comment import Comment, comment_schema
+from models.user import User
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
 comments_bp = Blueprint('comments', __name__)
