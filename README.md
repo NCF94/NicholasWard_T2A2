@@ -244,7 +244,7 @@ Authentication methods: JWT Token is required (must be logged in)
 
 ## R6: ERD
 
-![ERD](./docs/SurfingAPI.jpg)
+![ERD](./docs/surfingAPI.jpg)
 
 ---
 
